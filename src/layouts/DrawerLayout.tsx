@@ -37,8 +37,8 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
     setMobileOpen((prevState) => !prevState);
   };
 
-  const goToLeaderboard = () => {
-    navigate('/leaderboard');
+  const goToPage = (item: string) => {
+    navigate(`/${item.trim().toLowerCase().replace(/\s+/g, '-')}`);
   }
 
   const drawer = (
@@ -89,7 +89,7 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }} onClick={goToLeaderboard}>
+              <Button key={item} sx={{ color: '#fff' }} onClick={() => goToPage(item)}>
                 {item}
               </Button>
             ))}
