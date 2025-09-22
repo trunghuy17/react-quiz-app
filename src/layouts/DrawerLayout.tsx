@@ -37,6 +37,10 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const goToLeaderboard = () => {
+    navigate('/leaderboard');
+  }
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -85,7 +89,7 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+              <Button key={item} sx={{ color: '#fff' }} onClick={goToLeaderboard}>
                 {item}
               </Button>
             ))}
