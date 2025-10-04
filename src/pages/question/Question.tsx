@@ -5,6 +5,8 @@ import { decode } from 'html-entities';
 import type { IQuestion, RootState } from '../../types';
 import { useNavigate } from 'react-router';
 import { updateScore } from '../../redux/app.action';
+import { TIME_LEFT } from '../../configs';
+import { formatToTimer } from '../../utils/formatToTimer';
 
 
 /*
@@ -19,7 +21,8 @@ function Question() {
   const [questionIndex, setQuestionIndex] = React.useState(0);
   const [dataSource, setDataSource] = React.useState<IQuestion[]>([]);
   const [options, setOptions] = React.useState<string[]>([]);
-
+  const [timeLeft, setTimeleft] = React.useState(TIME_LEFT[form.difficulty || 'easy'])
+ 
   React.useEffect(() => {
     const { amount, category, difficulty, type } = form;
     if (!amount || !category || !difficulty || !type) return;
@@ -64,8 +67,32 @@ function Question() {
       return;
     }
 
+    console.log('handleAnwser: ', questionIndex)
+
     setQuestionIndex(prevState => prevState + 1)
   }
+
+  // countdown
+  React.useEffect(() => {
+    // 1 question -> 30s
+    // 30s -> all questions
+
+    const timer = setInterval(() => {
+      setTimeleft(prevState => {
+        // 0 > 0
+        if (prevState > 0) {
+          return prevState - 1; // 0
+        }
+        const randomContent = options[Math.floor(Math.random() * 4)]; // 1 - 4;
+        handleAnwser(randomContent);
+        return TIME_LEFT[form.difficulty || 'easy']
+      })
+    }, 1000)
+    
+    return () => {
+      clearInterval(timer)
+    }
+  }, [options]);
 
   if (dataSource.length === 0) return (
     <div>Loading ...</div>
@@ -92,8 +119,8 @@ function Question() {
         <Typography variant="body1" gutterBottom >
           Score: {score}/{dataSource.length}
         </Typography>
-        <Typography variant="body1" gutterBottom >
-          Timer: 0:10
+        <Typography variant="body1" gutterBottom sx={{ color: timeLeft < 10 ? '#f00' : '#000' }}>
+          Timer: {formatToTimer(timeLeft)}
         </Typography>
       </Box>
     </>
