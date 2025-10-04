@@ -6,7 +6,8 @@ const initialState = {
     difficulty: '',
     amount: 0,
     type: ''
-  }
+  },
+  score: 0,
 }
 
 export const appReducer = (state = initialState, action: IAction) => {
@@ -15,6 +16,12 @@ export const appReducer = (state = initialState, action: IAction) => {
       return {
         ...state,
         form: action.payload
+      }
+    }
+    case 'UPDATE_SCORE': {
+      return {
+        ...state,
+        score: action.payload
       }
     }
     default:

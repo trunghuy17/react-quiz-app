@@ -17,11 +17,12 @@ export interface IForm {
 
 export interface IAppState {
   form: {
-    category: '',
-    difficulty: '',
-    amount: 0,
-    type: ''
-  }
+    category:  string
+    difficulty: string
+    amount: number,
+    type: string
+  },
+  score: number
 }
 
 export interface RootState {
