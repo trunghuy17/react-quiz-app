@@ -13,3 +13,10 @@ export const updateScore = (payload: number) => {
     payload
   }
 }
+
+export const addCandidate = (payload: any) => {
+  return {
+    type: 'SET_CANDIDATE',
+    payload
+  }
+}

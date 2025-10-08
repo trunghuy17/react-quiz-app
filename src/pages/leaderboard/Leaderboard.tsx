@@ -7,25 +7,16 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number
-) {
-  return { name, calories, fat, carbs };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24),
-  createData("Ice cream sandwich", 237, 9.0, 37),
-  createData("Eclair", 262, 16.0, 24),
-  createData("Cupcake", 305, 3.7, 67),
-  createData("Gingerbread", 356, 16.0, 49),
-];
+import { useSelector } from "react-redux";
+import type { RootState } from "../../types";
+import { useNavigate } from "react-router";
 
 function LeaderBoard() {
+  const navigate = useNavigate()
+  const candidates = useSelector((state: RootState) => state.app.candidates ?? []);
+  const gotoDashboard = () => {
+    navigate('/dashboard')
+  }
   return (
     <>
       <Box sx={{ maxWidth: 900, mx: "auto", px: 2, mt: 4 }}>
@@ -40,7 +31,7 @@ function LeaderBoard() {
           >
             EXPORT CSV
           </Button>
-          <Button variant="outlined" type="button">
+          <Button variant="outlined" type="button" onClick={gotoDashboard}>
             Go Home
           </Button>
         </Box>
@@ -56,17 +47,17 @@ function LeaderBoard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {candidates.map((candidate, index) => (
                   <TableRow
-                    key={row.name}
+                    key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {candidate.firstName}
                     </TableCell>
-                    <TableCell>{row.calories}</TableCell>
-                    <TableCell>{row.fat}</TableCell>
-                    <TableCell>{row.carbs}</TableCell>
+                    <TableCell>{candidate.lastName}</TableCell>
+                    <TableCell>{candidate.email}</TableCell>
+                    <TableCell>{candidate.score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

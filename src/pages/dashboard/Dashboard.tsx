@@ -3,7 +3,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typo
 import { useNavigate } from "react-router";
 import type { ICategory } from "../../types";
 import { useDispatch } from "react-redux";
-import { setForm } from "../../redux/app.action";
+import { setForm, updateScore } from "../../redux/app.action";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -50,6 +50,7 @@ function Dashboard() {
       type: selectedType
     };
     dispatch(setForm(form))
+    dispatch(updateScore(0))
     navigate('/question')
   }
 
