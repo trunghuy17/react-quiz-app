@@ -10,12 +10,25 @@ import Paper from "@mui/material/Paper";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../types";
 import { useNavigate } from "react-router";
+import moment from "moment";
+import { saveAs } from "file-saver";
 
 function LeaderBoard() {
   const navigate = useNavigate()
   const candidates = useSelector((state: RootState) => state.app.candidates ?? []);
   const gotoDashboard = () => {
     navigate('/dashboard')
+  }
+
+  const handleExportCsv = () => {
+    const csvContent = candidates.map((candidate) => {
+      return `${candidate.firstName},${candidate.lastName},${candidate.email},${candidate.score}`
+    })
+    const csvHeader = `First Name,Last Name,Email,Score`
+    const csvData = `${csvHeader}\n${csvContent.join('\n')}`
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    const fileName = `leaderboard-${moment().format('YYYY-MM-DD')}.csv`;
+    saveAs(blob, fileName);
   }
   return (
     <>
@@ -28,6 +41,8 @@ function LeaderBoard() {
             variant="contained"
             startIcon={<DescriptionIcon />}
             sx={{ mr: 2 }}
+            onClick={handleExportCsv}
+            disabled={candidates.length === 0}
           >
             EXPORT CSV
           </Button>
