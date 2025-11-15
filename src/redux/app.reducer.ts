@@ -1,4 +1,4 @@
-import type { IAction } from "../types"
+import type { CandidateInfo, IAction } from "../types"
 
 const initialState = {
   form: {
@@ -6,7 +6,9 @@ const initialState = {
     difficulty: '',
     amount: 0,
     type: ''
-  }
+  },
+  score: 0,
+  candidates: [] as CandidateInfo[]
 }
 
 export const appReducer = (state = initialState, action: IAction) => {
@@ -15,6 +17,18 @@ export const appReducer = (state = initialState, action: IAction) => {
       return {
         ...state,
         form: action.payload
+      }
+    }
+    case 'UPDATE_SCORE': {
+      return {
+        ...state,
+        score: action.payload
+      }
+    }
+    case "SET_CANDIDATE": {
+      return {
+        ...state,
+        candidates: action.payload
       }
     }
     default:

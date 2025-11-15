@@ -1,38 +1,56 @@
-import React from "react";
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import React, { useEffect, useState } from "react";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography, type SelectChangeEvent } from "@mui/material"
 import { useNavigate } from "react-router";
 import type { ICategory } from "../../types";
 import { useDispatch } from "react-redux";
-import { setForm } from "../../redux/app.action";
+import { setForm, updateScore } from "../../redux/app.action";
 
 function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  const [categories, setCategories] = React.useState<ICategory[]>([])
+  const [categories, setCategories] = useState<ICategory[]>([])
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [amount, setAmount] = useState('');
 
-  React.useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const res = await fetch('https://opentdb.com/api_category.php');
-        const data = await res.json();
-        setCategories(data.trivia_categories);
-      } catch(err)  {
-        console.error('fetchCategories err: ', err)
-      }
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch('https://opentdb.com/api_category.php');
+      const data = await res.json();
+      setCategories(data.trivia_categories);
+    } catch (err) {
+      console.error('fetchCategories err: ', err)
     }
+  }
+
+  useEffect(() => {
     fetchCategories();
   }, [])
+
+  const handleChangeCategory = (event: SelectChangeEvent<string>) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  const handleChangeDifficulty = (event: SelectChangeEvent<string>) => {
+    setSelectedDifficulty(event.target.value);
+  }
+
+  const handleChangeType = (event: SelectChangeEvent<string>) => {
+    setSelectedType(event.target.value);
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const form = {
-      category: '12',
-      amount: 5,
-      difficulty: 'medium',
-      type: 'multiple'
+      category: selectedCategory,
+      amount: Number(amount),
+      difficulty: selectedDifficulty,
+      type: selectedType
     };
     dispatch(setForm(form))
+    dispatch(updateScore(0))
     navigate('/question')
   }
 
@@ -48,9 +66,9 @@ function Dashboard() {
           <Select
             labelId="category"
             id="category"
-            // value={age}
+            value={selectedCategory}
             label="Category"
-            // onChange={handleChange}
+            onChange={handleChangeCategory}
           >
             {categories.map(category => (
               <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
@@ -65,9 +83,9 @@ function Dashboard() {
           <Select
             labelId="difficulty"
             id="difficulty"
-            // value={age}
+            value={selectedDifficulty}
             label="Difficulty"
-            // onChange={handleChange}
+            onChange={handleChangeDifficulty}
           >
             <MenuItem value="easy">Easy</MenuItem>
             <MenuItem value="medium">Medium</MenuItem>
@@ -82,9 +100,9 @@ function Dashboard() {
           <Select
             labelId="type"
             id="type"
-            // value={age}
+            value={selectedType}
             label="Type"
-            // onChange={handleChange}
+            onChange={handleChangeType}
           >
             <MenuItem value="multiple">Multiple Choice</MenuItem>
             <MenuItem value="boolean">True/False</MenuItem>
@@ -94,7 +112,7 @@ function Dashboard() {
         <br /><br />
 
         <FormControl fullWidth>
-          <TextField id="amount" label="Amount" variant="outlined" />
+          <TextField id="amount" label="Amount" variant="outlined" value={amount} onChange={(e) => setAmount(e.target.value)}/>
         </FormControl>
 
         <Box sx={{ textAlign: 'center', mt: 3 }}>

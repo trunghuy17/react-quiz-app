@@ -6,3 +6,17 @@ export const setForm = (payload: IForm) => {
     payload
   }
 }
+
+export const updateScore = (payload: number) => {
+  return {
+    type: 'UPDATE_SCORE',
+    payload
+  }
+}
+
+export const addCandidate = (payload: any) => {
+  return {
+    type: 'SET_CANDIDATE',
+    payload
+  }
+}

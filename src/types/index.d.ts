@@ -15,13 +15,21 @@ export interface IForm {
   type: string
 }
 
+export interface CandidateInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  score: number;
+}
 export interface IAppState {
   form: {
-    category: '',
-    difficulty: '',
-    amount: 0,
-    type: ''
-  }
+    category:  string
+    difficulty: string
+    amount: number,
+    type: string
+  },
+  score: number,
+  candidates: CandidateInfo[]
 }
 
 export interface RootState {

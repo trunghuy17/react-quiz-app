@@ -37,6 +37,11 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const goToPage = (item: string) => {
+    // Leaderboard
+    navigate(`/${item.trim().toLowerCase().replace(/\s+/g, '-')}`);
+  }
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -84,11 +89,14 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
             Quiz App
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+            {/* {navItems.map((item) => (
+              <Button key={item} sx={{ color: '#fff' }} onClick={() => goToPage(item)}>
                 {item}
               </Button>
-            ))}
+            ))} */}
+            <Button  sx={{ color: '#fff' }} onClick={() => navigate('/leaderboard')}>
+              Leaderboard
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -111,9 +119,9 @@ function DrawerLayout({ children, props }: DrawerLayoutProps) {
       </nav>
       <Box component="main" sx={{ p: 3, width: '100%' }}>
         <Toolbar />
-        <Typography>
+        <Box>
           {children}
-        </Typography>
+        </Box>
       </Box>
     </Box>
   )
